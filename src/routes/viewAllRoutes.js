@@ -1,5 +1,6 @@
 const express = require('express');
 const viewAllRouter = express.Router();
+const {studentModel} = require('../models/studentModel');
 
 function router(nav){
     var students = [
@@ -47,6 +48,19 @@ function router(nav){
             );
         }
     );
+
+    viewAllRouter.get('/viewAllapi',(req,res)=>{
+        studentModel.find((error,data)=>{
+            if(error)
+            {
+                throw error;
+            }
+            else
+            {
+                res.send(data);
+            }
+        })
+    });
 
     return viewAllRouter;
 }

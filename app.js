@@ -3,6 +3,8 @@ const path = require('path');
 const chalk = require('chalk');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const {studentModel} = require('./src/models/studentModel');
 const app = new express();
 
 app.set('views','./src/views');
@@ -33,6 +35,8 @@ app.use('/viewAll',viewAllRouter);
 app.use('/search',searchRouter);
 app.use('/update',updateRouter);
 
+mongoose.connect("mongodb://localhost:27017/MyCollegeDb");
+
 app.get('/',(req,res)=>{
     res.render('index',
     {
@@ -43,7 +47,9 @@ app.get('/',(req,res)=>{
 
 app.route('/save')
     .post((req,res)=>{
-    console.log(req.body);
+        var student = new studentModel(req.body);
+        student.save();
+        res.send(req.body);
 });
 console.log("hello");
 app.listen(3001,()=>{
