@@ -35,7 +35,8 @@ app.use('/viewAll',viewAllRouter);
 app.use('/search',searchRouter);
 app.use('/update',updateRouter);
 
-mongoose.connect("mongodb://localhost:27017/MyCollegeDb");
+//mongoose.connect("mongodb://localhost:27017/MyCollegeDb");
+mongoose.connect("mongodb+srv://Zumairaka:parveen00@cluster0-rops0.mongodb.net/test?retryWrites=true&w=majority");
 
 app.get('/',(req,res)=>{
     res.render('index',
@@ -45,13 +46,18 @@ app.get('/',(req,res)=>{
     });
 });
 
-app.route('/save')
-    .post((req,res)=>{
-        var student = new studentModel(req.body);
-        student.save();
-        res.send(req.body);
-});
-console.log("hello");
-app.listen(3001,()=>{
+app.post('/save',async (req,res)=>{
+            var student = new studentModel(req.body);
+            await student.save((error,data)=>{
+                if(error){
+                    res.json({"Status":"Error"});
+                    throw error;
+                }
+                else{
+                    res.json({"Status":"Success"});
+                }
+            });
+        });
+app.listen(process.env.PORT || 3001,()=>{
     console.log('Listening to Port: '+chalk.green('3001'));
 });
