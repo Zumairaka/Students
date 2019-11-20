@@ -1,6 +1,6 @@
 const express = require('express');
 const searchRouter = express.Router();
-const {searchModel} = require('../models/searchModel');
+const {studentModel} = require('../models/studentModel');
 
 function router(nav){
     searchRouter.route('/')
@@ -16,14 +16,12 @@ function router(nav){
 
     searchRouter.route('/save')
         .post((req,res)=>{
-            var search = new searchModel(req.body);
-            search.save((error,data)=>{
+            studentModel.find(req.body,(error,data)=>{
                 if(error){
-                    res.json({"Status":"Error"});
                     throw error;
                 }
                 else{
-                    res.json({"Status":"Success"});
+                    res.json(data);
                 }
             });
         });
